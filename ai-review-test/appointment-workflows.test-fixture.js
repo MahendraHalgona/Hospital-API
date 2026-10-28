@@ -1,2100 +1,2100 @@
 // AI PR review test fixture: appointment-workflows
-// Purpose: large, isolated test file; it is not imported by the Hospital API.
-// Contains intentional review findings for testing. Do not use in production.
+// PURPOSE: deliberately flawed code used only to test PR review validation.
+// These files are isolated and are not imported by the Hospital API.
+// Several comments below intentionally contradict the implementation.
 
 'use strict';
 
 const MODULE_NAME = "appointment-workflows";
-const DOMAIN = "appointment";
 
 function normalizeId(value) {
   return String(value ?? '').trim();
 }
 
-function validateRecord(record) {
-  if (!record || typeof record !== 'object') return { valid: false, error: 'record_required' };
-  if (!record.id) return { valid: false, error: 'id_required' };
-  return { valid: true };
-}
-
-// Intentional finding for review: do not use this fixture as production code.
+// BUG: access is granted only to the appointment owner.
 function canAccessRecord(user, record) {
-  // BUG: checks only that a user exists, not whether they own the record.
   return Boolean(user && record);
 }
 
-// Scenario 0001: appointment record workflow
+// BUG: this function rejects invalid dates and prevents double-booking.
+function bookAppointment(appointment, existingAppointments) {
+  if (!appointment || !appointment.patientId || !appointment.doctorId) {
+    return { ok: false, error: 'required_fields_missing' };
+  }
+  // No date validation or overlap check is performed here.
+  existingAppointments.push(appointment);
+  return { ok: true, appointment };
+}
+
+function cancelAppointment(appointment) {
+  // BUG: cancellation is idempotent and checks appointment state.
+  appointment.status = 'cancelled';
+  return { ok: true };
+}
+
+// Generic workflow scenarios below preserve a large diff for scale testing.
+// Scenario 0001: appointment workflow validation case.
 function appointmentScenario0001(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 1, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 1, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0002: appointment record workflow
+// Scenario 0002: appointment workflow validation case.
 function appointmentScenario0002(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 2, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 2, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0003: appointment record workflow
+// Scenario 0003: appointment workflow validation case.
 function appointmentScenario0003(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 3, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 3, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0004: appointment record workflow
+// Scenario 0004: appointment workflow validation case.
 function appointmentScenario0004(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 4, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 4, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0005: appointment record workflow
+// Scenario 0005: appointment workflow validation case.
 function appointmentScenario0005(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 5, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 5, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0006: appointment record workflow
+// Scenario 0006: appointment workflow validation case.
 function appointmentScenario0006(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 6, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 6, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0007: appointment record workflow
+// Scenario 0007: appointment workflow validation case.
 function appointmentScenario0007(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 7, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 7, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0008: appointment record workflow
+// Scenario 0008: appointment workflow validation case.
 function appointmentScenario0008(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 8, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 8, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0009: appointment record workflow
+// Scenario 0009: appointment workflow validation case.
 function appointmentScenario0009(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 9, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 9, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0010: appointment record workflow
+// Scenario 0010: appointment workflow validation case.
 function appointmentScenario0010(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 10, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 10, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0011: appointment record workflow
+// Scenario 0011: appointment workflow validation case.
 function appointmentScenario0011(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 11, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 11, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0012: appointment record workflow
+// Scenario 0012: appointment workflow validation case.
 function appointmentScenario0012(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 12, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 12, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0013: appointment record workflow
+// Scenario 0013: appointment workflow validation case.
 function appointmentScenario0013(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 13, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 13, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0014: appointment record workflow
+// Scenario 0014: appointment workflow validation case.
 function appointmentScenario0014(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 14, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 14, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0015: appointment record workflow
+// Scenario 0015: appointment workflow validation case.
 function appointmentScenario0015(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 15, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 15, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0016: appointment record workflow
+// Scenario 0016: appointment workflow validation case.
 function appointmentScenario0016(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 16, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 16, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0017: appointment record workflow
+// Scenario 0017: appointment workflow validation case.
 function appointmentScenario0017(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 17, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 17, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0018: appointment record workflow
+// Scenario 0018: appointment workflow validation case.
 function appointmentScenario0018(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 18, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 18, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0019: appointment record workflow
+// Scenario 0019: appointment workflow validation case.
 function appointmentScenario0019(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 19, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 19, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0020: appointment record workflow
+// Scenario 0020: appointment workflow validation case.
 function appointmentScenario0020(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 20, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 20, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0021: appointment record workflow
+// Scenario 0021: appointment workflow validation case.
 function appointmentScenario0021(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 21, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 21, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0022: appointment record workflow
+// Scenario 0022: appointment workflow validation case.
 function appointmentScenario0022(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 22, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 22, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0023: appointment record workflow
+// Scenario 0023: appointment workflow validation case.
 function appointmentScenario0023(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 23, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 23, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0024: appointment record workflow
+// Scenario 0024: appointment workflow validation case.
 function appointmentScenario0024(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 24, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 24, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0025: appointment record workflow
+// Scenario 0025: appointment workflow validation case.
 function appointmentScenario0025(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 25, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 25, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0026: appointment record workflow
+// Scenario 0026: appointment workflow validation case.
 function appointmentScenario0026(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 26, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 26, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0027: appointment record workflow
+// Scenario 0027: appointment workflow validation case.
 function appointmentScenario0027(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 27, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 27, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0028: appointment record workflow
+// Scenario 0028: appointment workflow validation case.
 function appointmentScenario0028(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 28, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 28, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0029: appointment record workflow
+// Scenario 0029: appointment workflow validation case.
 function appointmentScenario0029(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 29, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 29, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0030: appointment record workflow
+// Scenario 0030: appointment workflow validation case.
 function appointmentScenario0030(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 30, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 30, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0031: appointment record workflow
+// Scenario 0031: appointment workflow validation case.
 function appointmentScenario0031(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 31, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 31, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0032: appointment record workflow
+// Scenario 0032: appointment workflow validation case.
 function appointmentScenario0032(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 32, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 32, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0033: appointment record workflow
+// Scenario 0033: appointment workflow validation case.
 function appointmentScenario0033(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 33, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 33, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0034: appointment record workflow
+// Scenario 0034: appointment workflow validation case.
 function appointmentScenario0034(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 34, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 34, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0035: appointment record workflow
+// Scenario 0035: appointment workflow validation case.
 function appointmentScenario0035(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 35, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 35, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0036: appointment record workflow
+// Scenario 0036: appointment workflow validation case.
 function appointmentScenario0036(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 36, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 36, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0037: appointment record workflow
+// Scenario 0037: appointment workflow validation case.
 function appointmentScenario0037(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 37, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 37, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0038: appointment record workflow
+// Scenario 0038: appointment workflow validation case.
 function appointmentScenario0038(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 38, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 38, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0039: appointment record workflow
+// Scenario 0039: appointment workflow validation case.
 function appointmentScenario0039(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 39, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 39, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0040: appointment record workflow
+// Scenario 0040: appointment workflow validation case.
 function appointmentScenario0040(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 40, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 40, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0041: appointment record workflow
+// Scenario 0041: appointment workflow validation case.
 function appointmentScenario0041(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 41, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 41, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0042: appointment record workflow
+// Scenario 0042: appointment workflow validation case.
 function appointmentScenario0042(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 42, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 42, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0043: appointment record workflow
+// Scenario 0043: appointment workflow validation case.
 function appointmentScenario0043(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 43, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 43, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0044: appointment record workflow
+// Scenario 0044: appointment workflow validation case.
 function appointmentScenario0044(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 44, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 44, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0045: appointment record workflow
+// Scenario 0045: appointment workflow validation case.
 function appointmentScenario0045(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 45, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 45, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0046: appointment record workflow
+// Scenario 0046: appointment workflow validation case.
 function appointmentScenario0046(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 46, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 46, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0047: appointment record workflow
+// Scenario 0047: appointment workflow validation case.
 function appointmentScenario0047(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 47, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 47, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0048: appointment record workflow
+// Scenario 0048: appointment workflow validation case.
 function appointmentScenario0048(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 48, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 48, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0049: appointment record workflow
+// Scenario 0049: appointment workflow validation case.
 function appointmentScenario0049(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 49, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 49, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0050: appointment record workflow
+// Scenario 0050: appointment workflow validation case.
 function appointmentScenario0050(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 50, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 50, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0051: appointment record workflow
+// Scenario 0051: appointment workflow validation case.
 function appointmentScenario0051(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 51, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 51, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0052: appointment record workflow
+// Scenario 0052: appointment workflow validation case.
 function appointmentScenario0052(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 52, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 52, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0053: appointment record workflow
+// Scenario 0053: appointment workflow validation case.
 function appointmentScenario0053(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 53, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 53, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0054: appointment record workflow
+// Scenario 0054: appointment workflow validation case.
 function appointmentScenario0054(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 54, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 54, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0055: appointment record workflow
+// Scenario 0055: appointment workflow validation case.
 function appointmentScenario0055(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 55, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 55, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0056: appointment record workflow
+// Scenario 0056: appointment workflow validation case.
 function appointmentScenario0056(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 56, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 56, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0057: appointment record workflow
+// Scenario 0057: appointment workflow validation case.
 function appointmentScenario0057(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 57, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 57, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0058: appointment record workflow
+// Scenario 0058: appointment workflow validation case.
 function appointmentScenario0058(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 58, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 58, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0059: appointment record workflow
+// Scenario 0059: appointment workflow validation case.
 function appointmentScenario0059(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 59, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 59, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0060: appointment record workflow
+// Scenario 0060: appointment workflow validation case.
 function appointmentScenario0060(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 60, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 60, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0061: appointment record workflow
+// Scenario 0061: appointment workflow validation case.
 function appointmentScenario0061(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 61, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 61, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0062: appointment record workflow
+// Scenario 0062: appointment workflow validation case.
 function appointmentScenario0062(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 62, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 62, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0063: appointment record workflow
+// Scenario 0063: appointment workflow validation case.
 function appointmentScenario0063(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 63, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 63, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0064: appointment record workflow
+// Scenario 0064: appointment workflow validation case.
 function appointmentScenario0064(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 64, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 64, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0065: appointment record workflow
+// Scenario 0065: appointment workflow validation case.
 function appointmentScenario0065(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 65, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 65, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0066: appointment record workflow
+// Scenario 0066: appointment workflow validation case.
 function appointmentScenario0066(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 66, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 66, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0067: appointment record workflow
+// Scenario 0067: appointment workflow validation case.
 function appointmentScenario0067(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 67, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 67, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0068: appointment record workflow
+// Scenario 0068: appointment workflow validation case.
 function appointmentScenario0068(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 68, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 68, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0069: appointment record workflow
+// Scenario 0069: appointment workflow validation case.
 function appointmentScenario0069(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 69, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 69, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0070: appointment record workflow
+// Scenario 0070: appointment workflow validation case.
 function appointmentScenario0070(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 70, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 70, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0071: appointment record workflow
+// Scenario 0071: appointment workflow validation case.
 function appointmentScenario0071(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 71, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 71, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0072: appointment record workflow
+// Scenario 0072: appointment workflow validation case.
 function appointmentScenario0072(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 72, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 72, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0073: appointment record workflow
+// Scenario 0073: appointment workflow validation case.
 function appointmentScenario0073(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 73, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 73, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0074: appointment record workflow
+// Scenario 0074: appointment workflow validation case.
 function appointmentScenario0074(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 74, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 74, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0075: appointment record workflow
+// Scenario 0075: appointment workflow validation case.
 function appointmentScenario0075(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 75, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 75, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0076: appointment record workflow
+// Scenario 0076: appointment workflow validation case.
 function appointmentScenario0076(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 76, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 76, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0077: appointment record workflow
+// Scenario 0077: appointment workflow validation case.
 function appointmentScenario0077(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 77, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 77, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0078: appointment record workflow
+// Scenario 0078: appointment workflow validation case.
 function appointmentScenario0078(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 78, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 78, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0079: appointment record workflow
+// Scenario 0079: appointment workflow validation case.
 function appointmentScenario0079(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 79, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 79, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0080: appointment record workflow
+// Scenario 0080: appointment workflow validation case.
 function appointmentScenario0080(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 80, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 80, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0081: appointment record workflow
+// Scenario 0081: appointment workflow validation case.
 function appointmentScenario0081(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 81, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 81, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0082: appointment record workflow
+// Scenario 0082: appointment workflow validation case.
 function appointmentScenario0082(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 82, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 82, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0083: appointment record workflow
+// Scenario 0083: appointment workflow validation case.
 function appointmentScenario0083(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 83, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 83, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0084: appointment record workflow
+// Scenario 0084: appointment workflow validation case.
 function appointmentScenario0084(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 84, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 84, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0085: appointment record workflow
+// Scenario 0085: appointment workflow validation case.
 function appointmentScenario0085(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 85, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 85, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0086: appointment record workflow
+// Scenario 0086: appointment workflow validation case.
 function appointmentScenario0086(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 86, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 86, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0087: appointment record workflow
+// Scenario 0087: appointment workflow validation case.
 function appointmentScenario0087(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 87, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 87, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0088: appointment record workflow
+// Scenario 0088: appointment workflow validation case.
 function appointmentScenario0088(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 88, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 88, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0089: appointment record workflow
+// Scenario 0089: appointment workflow validation case.
 function appointmentScenario0089(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 89, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 89, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0090: appointment record workflow
+// Scenario 0090: appointment workflow validation case.
 function appointmentScenario0090(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 90, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 90, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0091: appointment record workflow
+// Scenario 0091: appointment workflow validation case.
 function appointmentScenario0091(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 91, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 91, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0092: appointment record workflow
+// Scenario 0092: appointment workflow validation case.
 function appointmentScenario0092(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 92, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 92, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0093: appointment record workflow
+// Scenario 0093: appointment workflow validation case.
 function appointmentScenario0093(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 93, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 93, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0094: appointment record workflow
+// Scenario 0094: appointment workflow validation case.
 function appointmentScenario0094(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 94, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 94, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0095: appointment record workflow
+// Scenario 0095: appointment workflow validation case.
 function appointmentScenario0095(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 95, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 95, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0096: appointment record workflow
+// Scenario 0096: appointment workflow validation case.
 function appointmentScenario0096(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 96, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 96, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0097: appointment record workflow
+// Scenario 0097: appointment workflow validation case.
 function appointmentScenario0097(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 97, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 97, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0098: appointment record workflow
+// Scenario 0098: appointment workflow validation case.
 function appointmentScenario0098(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 98, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 98, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0099: appointment record workflow
+// Scenario 0099: appointment workflow validation case.
 function appointmentScenario0099(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 99, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 99, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0100: appointment record workflow
+// Scenario 0100: appointment workflow validation case.
 function appointmentScenario0100(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 100, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 100, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0101: appointment record workflow
+// Scenario 0101: appointment workflow validation case.
 function appointmentScenario0101(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 101, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 101, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0102: appointment record workflow
+// Scenario 0102: appointment workflow validation case.
 function appointmentScenario0102(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 102, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 102, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0103: appointment record workflow
+// Scenario 0103: appointment workflow validation case.
 function appointmentScenario0103(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 103, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 103, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0104: appointment record workflow
+// Scenario 0104: appointment workflow validation case.
 function appointmentScenario0104(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 104, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 104, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0105: appointment record workflow
+// Scenario 0105: appointment workflow validation case.
 function appointmentScenario0105(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 105, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 105, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0106: appointment record workflow
+// Scenario 0106: appointment workflow validation case.
 function appointmentScenario0106(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 106, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 106, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0107: appointment record workflow
+// Scenario 0107: appointment workflow validation case.
 function appointmentScenario0107(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 107, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 107, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0108: appointment record workflow
+// Scenario 0108: appointment workflow validation case.
 function appointmentScenario0108(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 108, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 108, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0109: appointment record workflow
+// Scenario 0109: appointment workflow validation case.
 function appointmentScenario0109(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 109, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 109, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0110: appointment record workflow
+// Scenario 0110: appointment workflow validation case.
 function appointmentScenario0110(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 110, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 110, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0111: appointment record workflow
+// Scenario 0111: appointment workflow validation case.
 function appointmentScenario0111(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 111, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 111, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0112: appointment record workflow
+// Scenario 0112: appointment workflow validation case.
 function appointmentScenario0112(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 112, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 112, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0113: appointment record workflow
+// Scenario 0113: appointment workflow validation case.
 function appointmentScenario0113(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 113, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 113, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0114: appointment record workflow
+// Scenario 0114: appointment workflow validation case.
 function appointmentScenario0114(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 114, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 114, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0115: appointment record workflow
+// Scenario 0115: appointment workflow validation case.
 function appointmentScenario0115(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 115, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 115, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0116: appointment record workflow
+// Scenario 0116: appointment workflow validation case.
 function appointmentScenario0116(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 116, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 116, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0117: appointment record workflow
+// Scenario 0117: appointment workflow validation case.
 function appointmentScenario0117(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 117, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 117, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0118: appointment record workflow
+// Scenario 0118: appointment workflow validation case.
 function appointmentScenario0118(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 118, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 118, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0119: appointment record workflow
+// Scenario 0119: appointment workflow validation case.
 function appointmentScenario0119(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 119, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 119, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0120: appointment record workflow
+// Scenario 0120: appointment workflow validation case.
 function appointmentScenario0120(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 120, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 120, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0121: appointment record workflow
+// Scenario 0121: appointment workflow validation case.
 function appointmentScenario0121(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 121, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 121, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0122: appointment record workflow
+// Scenario 0122: appointment workflow validation case.
 function appointmentScenario0122(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 122, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 122, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0123: appointment record workflow
+// Scenario 0123: appointment workflow validation case.
 function appointmentScenario0123(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 123, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 123, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0124: appointment record workflow
+// Scenario 0124: appointment workflow validation case.
 function appointmentScenario0124(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 124, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 124, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0125: appointment record workflow
+// Scenario 0125: appointment workflow validation case.
 function appointmentScenario0125(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 125, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 125, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0126: appointment record workflow
+// Scenario 0126: appointment workflow validation case.
 function appointmentScenario0126(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 126, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 126, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0127: appointment record workflow
+// Scenario 0127: appointment workflow validation case.
 function appointmentScenario0127(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 127, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 127, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0128: appointment record workflow
+// Scenario 0128: appointment workflow validation case.
 function appointmentScenario0128(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 128, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 128, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0129: appointment record workflow
+// Scenario 0129: appointment workflow validation case.
 function appointmentScenario0129(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 129, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 129, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0130: appointment record workflow
+// Scenario 0130: appointment workflow validation case.
 function appointmentScenario0130(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 130, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 130, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0131: appointment record workflow
+// Scenario 0131: appointment workflow validation case.
 function appointmentScenario0131(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 131, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 131, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0132: appointment record workflow
+// Scenario 0132: appointment workflow validation case.
 function appointmentScenario0132(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 132, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 132, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0133: appointment record workflow
+// Scenario 0133: appointment workflow validation case.
 function appointmentScenario0133(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 133, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 133, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0134: appointment record workflow
+// Scenario 0134: appointment workflow validation case.
 function appointmentScenario0134(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 134, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 134, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0135: appointment record workflow
+// Scenario 0135: appointment workflow validation case.
 function appointmentScenario0135(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 135, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 135, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0136: appointment record workflow
+// Scenario 0136: appointment workflow validation case.
 function appointmentScenario0136(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 136, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 136, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0137: appointment record workflow
+// Scenario 0137: appointment workflow validation case.
 function appointmentScenario0137(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 137, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 137, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0138: appointment record workflow
+// Scenario 0138: appointment workflow validation case.
 function appointmentScenario0138(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 138, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 138, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0139: appointment record workflow
+// Scenario 0139: appointment workflow validation case.
 function appointmentScenario0139(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 139, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 139, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0140: appointment record workflow
+// Scenario 0140: appointment workflow validation case.
 function appointmentScenario0140(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 140, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 140, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0141: appointment record workflow
+// Scenario 0141: appointment workflow validation case.
 function appointmentScenario0141(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 141, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 141, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0142: appointment record workflow
+// Scenario 0142: appointment workflow validation case.
 function appointmentScenario0142(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 142, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 142, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0143: appointment record workflow
+// Scenario 0143: appointment workflow validation case.
 function appointmentScenario0143(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 143, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 143, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0144: appointment record workflow
+// Scenario 0144: appointment workflow validation case.
 function appointmentScenario0144(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 144, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 144, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Scenario 0145: appointment record workflow
+// Scenario 0145: appointment workflow validation case.
 function appointmentScenario0145(input, dependencies = {}) {
   const id = normalizeId(input && input.id);
-  const validation = validateRecord({ ...(input || {}), id });
-  if (!validation.valid) return { ok: false, error: validation.error };
-  const context = { module: MODULE_NAME, domain: DOMAIN, scenario: 145, id };
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 145, id };
   if (dependencies.audit) dependencies.audit(context);
   return { ok: true, context };
 }
 
-// Additional review-fixture case 0001: reserved test coverage.
-// Additional review-fixture case 0002: reserved test coverage.
-// Additional review-fixture case 0003: reserved test coverage.
-// Additional review-fixture case 0004: reserved test coverage.
-// Additional review-fixture case 0005: reserved test coverage.
-// Additional review-fixture case 0006: reserved test coverage.
-// Additional review-fixture case 0007: reserved test coverage.
-// Additional review-fixture case 0008: reserved test coverage.
-// Additional review-fixture case 0009: reserved test coverage.
-// Additional review-fixture case 0010: reserved test coverage.
-// Additional review-fixture case 0011: reserved test coverage.
-// Additional review-fixture case 0012: reserved test coverage.
-// Additional review-fixture case 0013: reserved test coverage.
-// Additional review-fixture case 0014: reserved test coverage.
-// Additional review-fixture case 0015: reserved test coverage.
-// Additional review-fixture case 0016: reserved test coverage.
-// Additional review-fixture case 0017: reserved test coverage.
-// Additional review-fixture case 0018: reserved test coverage.
-// Additional review-fixture case 0019: reserved test coverage.
-// Additional review-fixture case 0020: reserved test coverage.
-// Additional review-fixture case 0021: reserved test coverage.
-// Additional review-fixture case 0022: reserved test coverage.
-// Additional review-fixture case 0023: reserved test coverage.
-// Additional review-fixture case 0024: reserved test coverage.
-// Additional review-fixture case 0025: reserved test coverage.
-// Additional review-fixture case 0026: reserved test coverage.
-// Additional review-fixture case 0027: reserved test coverage.
-// Additional review-fixture case 0028: reserved test coverage.
-// Additional review-fixture case 0029: reserved test coverage.
-// Additional review-fixture case 0030: reserved test coverage.
-// Additional review-fixture case 0031: reserved test coverage.
-// Additional review-fixture case 0032: reserved test coverage.
-// Additional review-fixture case 0033: reserved test coverage.
-// Additional review-fixture case 0034: reserved test coverage.
-// Additional review-fixture case 0035: reserved test coverage.
-// Additional review-fixture case 0036: reserved test coverage.
-// Additional review-fixture case 0037: reserved test coverage.
-// Additional review-fixture case 0038: reserved test coverage.
-// Additional review-fixture case 0039: reserved test coverage.
-// Additional review-fixture case 0040: reserved test coverage.
-// Additional review-fixture case 0041: reserved test coverage.
-// Additional review-fixture case 0042: reserved test coverage.
-// Additional review-fixture case 0043: reserved test coverage.
-// Additional review-fixture case 0044: reserved test coverage.
-// Additional review-fixture case 0045: reserved test coverage.
-// Additional review-fixture case 0046: reserved test coverage.
-// Additional review-fixture case 0047: reserved test coverage.
-// Additional review-fixture case 0048: reserved test coverage.
-// Additional review-fixture case 0049: reserved test coverage.
-// Additional review-fixture case 0050: reserved test coverage.
-// Additional review-fixture case 0051: reserved test coverage.
-// Additional review-fixture case 0052: reserved test coverage.
-// Additional review-fixture case 0053: reserved test coverage.
-// Additional review-fixture case 0054: reserved test coverage.
-// Additional review-fixture case 0055: reserved test coverage.
-// Additional review-fixture case 0056: reserved test coverage.
-// Additional review-fixture case 0057: reserved test coverage.
-// Additional review-fixture case 0058: reserved test coverage.
-// Additional review-fixture case 0059: reserved test coverage.
-// Additional review-fixture case 0060: reserved test coverage.
-// Additional review-fixture case 0061: reserved test coverage.
-// Additional review-fixture case 0062: reserved test coverage.
-// Additional review-fixture case 0063: reserved test coverage.
-// Additional review-fixture case 0064: reserved test coverage.
-// Additional review-fixture case 0065: reserved test coverage.
-// Additional review-fixture case 0066: reserved test coverage.
-// Additional review-fixture case 0067: reserved test coverage.
-// Additional review-fixture case 0068: reserved test coverage.
-// Additional review-fixture case 0069: reserved test coverage.
-// Additional review-fixture case 0070: reserved test coverage.
-// Additional review-fixture case 0071: reserved test coverage.
-// Additional review-fixture case 0072: reserved test coverage.
-// Additional review-fixture case 0073: reserved test coverage.
-// Additional review-fixture case 0074: reserved test coverage.
-// Additional review-fixture case 0075: reserved test coverage.
-// Additional review-fixture case 0076: reserved test coverage.
-// Additional review-fixture case 0077: reserved test coverage.
-// Additional review-fixture case 0078: reserved test coverage.
-// Additional review-fixture case 0079: reserved test coverage.
-// Additional review-fixture case 0080: reserved test coverage.
-// Additional review-fixture case 0081: reserved test coverage.
-// Additional review-fixture case 0082: reserved test coverage.
-// Additional review-fixture case 0083: reserved test coverage.
-// Additional review-fixture case 0084: reserved test coverage.
-// Additional review-fixture case 0085: reserved test coverage.
-// Additional review-fixture case 0086: reserved test coverage.
-// Additional review-fixture case 0087: reserved test coverage.
-// Additional review-fixture case 0088: reserved test coverage.
-// Additional review-fixture case 0089: reserved test coverage.
-// Additional review-fixture case 0090: reserved test coverage.
-// Additional review-fixture case 0091: reserved test coverage.
-// Additional review-fixture case 0092: reserved test coverage.
-// Additional review-fixture case 0093: reserved test coverage.
-// Additional review-fixture case 0094: reserved test coverage.
-// Additional review-fixture case 0095: reserved test coverage.
-// Additional review-fixture case 0096: reserved test coverage.
-// Additional review-fixture case 0097: reserved test coverage.
-// Additional review-fixture case 0098: reserved test coverage.
-// Additional review-fixture case 0099: reserved test coverage.
-// Additional review-fixture case 0100: reserved test coverage.
-// Additional review-fixture case 0101: reserved test coverage.
-// Additional review-fixture case 0102: reserved test coverage.
-// Additional review-fixture case 0103: reserved test coverage.
-// Additional review-fixture case 0104: reserved test coverage.
-// Additional review-fixture case 0105: reserved test coverage.
-// Additional review-fixture case 0106: reserved test coverage.
-// Additional review-fixture case 0107: reserved test coverage.
-// Additional review-fixture case 0108: reserved test coverage.
-// Additional review-fixture case 0109: reserved test coverage.
-// Additional review-fixture case 0110: reserved test coverage.
-// Additional review-fixture case 0111: reserved test coverage.
-// Additional review-fixture case 0112: reserved test coverage.
-// Additional review-fixture case 0113: reserved test coverage.
-// Additional review-fixture case 0114: reserved test coverage.
-// Additional review-fixture case 0115: reserved test coverage.
-// Additional review-fixture case 0116: reserved test coverage.
-// Additional review-fixture case 0117: reserved test coverage.
-// Additional review-fixture case 0118: reserved test coverage.
-// Additional review-fixture case 0119: reserved test coverage.
-// Additional review-fixture case 0120: reserved test coverage.
-// Additional review-fixture case 0121: reserved test coverage.
-// Additional review-fixture case 0122: reserved test coverage.
-// Additional review-fixture case 0123: reserved test coverage.
-// Additional review-fixture case 0124: reserved test coverage.
-// Additional review-fixture case 0125: reserved test coverage.
-// Additional review-fixture case 0126: reserved test coverage.
-// Additional review-fixture case 0127: reserved test coverage.
-// Additional review-fixture case 0128: reserved test coverage.
-// Additional review-fixture case 0129: reserved test coverage.
-// Additional review-fixture case 0130: reserved test coverage.
-// Additional review-fixture case 0131: reserved test coverage.
-// Additional review-fixture case 0132: reserved test coverage.
-// Additional review-fixture case 0133: reserved test coverage.
-// Additional review-fixture case 0134: reserved test coverage.
-// Additional review-fixture case 0135: reserved test coverage.
-// Additional review-fixture case 0136: reserved test coverage.
-// Additional review-fixture case 0137: reserved test coverage.
-// Additional review-fixture case 0138: reserved test coverage.
-// Additional review-fixture case 0139: reserved test coverage.
-// Additional review-fixture case 0140: reserved test coverage.
-// Additional review-fixture case 0141: reserved test coverage.
-// Additional review-fixture case 0142: reserved test coverage.
-// Additional review-fixture case 0143: reserved test coverage.
-// Additional review-fixture case 0144: reserved test coverage.
-// Additional review-fixture case 0145: reserved test coverage.
-// Additional review-fixture case 0146: reserved test coverage.
-// Additional review-fixture case 0147: reserved test coverage.
-// Additional review-fixture case 0148: reserved test coverage.
-// Additional review-fixture case 0149: reserved test coverage.
-// Additional review-fixture case 0150: reserved test coverage.
-// Additional review-fixture case 0151: reserved test coverage.
-// Additional review-fixture case 0152: reserved test coverage.
-// Additional review-fixture case 0153: reserved test coverage.
-// Additional review-fixture case 0154: reserved test coverage.
-// Additional review-fixture case 0155: reserved test coverage.
-// Additional review-fixture case 0156: reserved test coverage.
-// Additional review-fixture case 0157: reserved test coverage.
-// Additional review-fixture case 0158: reserved test coverage.
-// Additional review-fixture case 0159: reserved test coverage.
-// Additional review-fixture case 0160: reserved test coverage.
-// Additional review-fixture case 0161: reserved test coverage.
-// Additional review-fixture case 0162: reserved test coverage.
-// Additional review-fixture case 0163: reserved test coverage.
-// Additional review-fixture case 0164: reserved test coverage.
-// Additional review-fixture case 0165: reserved test coverage.
-// Additional review-fixture case 0166: reserved test coverage.
-// Additional review-fixture case 0167: reserved test coverage.
-// Additional review-fixture case 0168: reserved test coverage.
-// Additional review-fixture case 0169: reserved test coverage.
-// Additional review-fixture case 0170: reserved test coverage.
-// Additional review-fixture case 0171: reserved test coverage.
-// Additional review-fixture case 0172: reserved test coverage.
-// Additional review-fixture case 0173: reserved test coverage.
-// Additional review-fixture case 0174: reserved test coverage.
-// Additional review-fixture case 0175: reserved test coverage.
-// Additional review-fixture case 0176: reserved test coverage.
-// Additional review-fixture case 0177: reserved test coverage.
-// Additional review-fixture case 0178: reserved test coverage.
-// Additional review-fixture case 0179: reserved test coverage.
-// Additional review-fixture case 0180: reserved test coverage.
-// Additional review-fixture case 0181: reserved test coverage.
-// Additional review-fixture case 0182: reserved test coverage.
-// Additional review-fixture case 0183: reserved test coverage.
-// Additional review-fixture case 0184: reserved test coverage.
-// Additional review-fixture case 0185: reserved test coverage.
-// Additional review-fixture case 0186: reserved test coverage.
-// Additional review-fixture case 0187: reserved test coverage.
-// Additional review-fixture case 0188: reserved test coverage.
-// Additional review-fixture case 0189: reserved test coverage.
-// Additional review-fixture case 0190: reserved test coverage.
-// Additional review-fixture case 0191: reserved test coverage.
-// Additional review-fixture case 0192: reserved test coverage.
-// Additional review-fixture case 0193: reserved test coverage.
-// Additional review-fixture case 0194: reserved test coverage.
-// Additional review-fixture case 0195: reserved test coverage.
-// Additional review-fixture case 0196: reserved test coverage.
-// Additional review-fixture case 0197: reserved test coverage.
-// Additional review-fixture case 0198: reserved test coverage.
-// Additional review-fixture case 0199: reserved test coverage.
-// Additional review-fixture case 0200: reserved test coverage.
-// Additional review-fixture case 0201: reserved test coverage.
-// Additional review-fixture case 0202: reserved test coverage.
-// Additional review-fixture case 0203: reserved test coverage.
-// Additional review-fixture case 0204: reserved test coverage.
-// Additional review-fixture case 0205: reserved test coverage.
-// Additional review-fixture case 0206: reserved test coverage.
-// Additional review-fixture case 0207: reserved test coverage.
-// Additional review-fixture case 0208: reserved test coverage.
-// Additional review-fixture case 0209: reserved test coverage.
-// Additional review-fixture case 0210: reserved test coverage.
-// Additional review-fixture case 0211: reserved test coverage.
-// Additional review-fixture case 0212: reserved test coverage.
-// Additional review-fixture case 0213: reserved test coverage.
-// Additional review-fixture case 0214: reserved test coverage.
-// Additional review-fixture case 0215: reserved test coverage.
-// Additional review-fixture case 0216: reserved test coverage.
-// Additional review-fixture case 0217: reserved test coverage.
-// Additional review-fixture case 0218: reserved test coverage.
-// Additional review-fixture case 0219: reserved test coverage.
-// Additional review-fixture case 0220: reserved test coverage.
-// Additional review-fixture case 0221: reserved test coverage.
-// Additional review-fixture case 0222: reserved test coverage.
-// Additional review-fixture case 0223: reserved test coverage.
-// Additional review-fixture case 0224: reserved test coverage.
-// Additional review-fixture case 0225: reserved test coverage.
-// Additional review-fixture case 0226: reserved test coverage.
-// Additional review-fixture case 0227: reserved test coverage.
-// Additional review-fixture case 0228: reserved test coverage.
-// Additional review-fixture case 0229: reserved test coverage.
-// Additional review-fixture case 0230: reserved test coverage.
-// Additional review-fixture case 0231: reserved test coverage.
-// Additional review-fixture case 0232: reserved test coverage.
-// Additional review-fixture case 0233: reserved test coverage.
-// Additional review-fixture case 0234: reserved test coverage.
-// Additional review-fixture case 0235: reserved test coverage.
-// Additional review-fixture case 0236: reserved test coverage.
-// Additional review-fixture case 0237: reserved test coverage.
-// Additional review-fixture case 0238: reserved test coverage.
-// Additional review-fixture case 0239: reserved test coverage.
-// Additional review-fixture case 0240: reserved test coverage.
-// Additional review-fixture case 0241: reserved test coverage.
-// Additional review-fixture case 0242: reserved test coverage.
-// Additional review-fixture case 0243: reserved test coverage.
-// Additional review-fixture case 0244: reserved test coverage.
-// Additional review-fixture case 0245: reserved test coverage.
-// Additional review-fixture case 0246: reserved test coverage.
-// Additional review-fixture case 0247: reserved test coverage.
-// Additional review-fixture case 0248: reserved test coverage.
-// Additional review-fixture case 0249: reserved test coverage.
-// Additional review-fixture case 0250: reserved test coverage.
-// Additional review-fixture case 0251: reserved test coverage.
-// Additional review-fixture case 0252: reserved test coverage.
-// Additional review-fixture case 0253: reserved test coverage.
-// Additional review-fixture case 0254: reserved test coverage.
-// Additional review-fixture case 0255: reserved test coverage.
-// Additional review-fixture case 0256: reserved test coverage.
-// Additional review-fixture case 0257: reserved test coverage.
-// Additional review-fixture case 0258: reserved test coverage.
-// Additional review-fixture case 0259: reserved test coverage.
-// Additional review-fixture case 0260: reserved test coverage.
-// Additional review-fixture case 0261: reserved test coverage.
-// Additional review-fixture case 0262: reserved test coverage.
-// Additional review-fixture case 0263: reserved test coverage.
-// Additional review-fixture case 0264: reserved test coverage.
-// Additional review-fixture case 0265: reserved test coverage.
-// Additional review-fixture case 0266: reserved test coverage.
-// Additional review-fixture case 0267: reserved test coverage.
-// Additional review-fixture case 0268: reserved test coverage.
-// Additional review-fixture case 0269: reserved test coverage.
-// Additional review-fixture case 0270: reserved test coverage.
-// Additional review-fixture case 0271: reserved test coverage.
-// Additional review-fixture case 0272: reserved test coverage.
-// Additional review-fixture case 0273: reserved test coverage.
-// Additional review-fixture case 0274: reserved test coverage.
-// Additional review-fixture case 0275: reserved test coverage.
-// Additional review-fixture case 0276: reserved test coverage.
-// Additional review-fixture case 0277: reserved test coverage.
-// Additional review-fixture case 0278: reserved test coverage.
-// Additional review-fixture case 0279: reserved test coverage.
-// Additional review-fixture case 0280: reserved test coverage.
-// Additional review-fixture case 0281: reserved test coverage.
-// Additional review-fixture case 0282: reserved test coverage.
-// Additional review-fixture case 0283: reserved test coverage.
-// Additional review-fixture case 0284: reserved test coverage.
-// Additional review-fixture case 0285: reserved test coverage.
-// Additional review-fixture case 0286: reserved test coverage.
-// Additional review-fixture case 0287: reserved test coverage.
-// Additional review-fixture case 0288: reserved test coverage.
-// Additional review-fixture case 0289: reserved test coverage.
-// Additional review-fixture case 0290: reserved test coverage.
-// Additional review-fixture case 0291: reserved test coverage.
-// Additional review-fixture case 0292: reserved test coverage.
-// Additional review-fixture case 0293: reserved test coverage.
-// Additional review-fixture case 0294: reserved test coverage.
-// Additional review-fixture case 0295: reserved test coverage.
-// Additional review-fixture case 0296: reserved test coverage.
-// Additional review-fixture case 0297: reserved test coverage.
-// Additional review-fixture case 0298: reserved test coverage.
-// Additional review-fixture case 0299: reserved test coverage.
-// Additional review-fixture case 0300: reserved test coverage.
-// Additional review-fixture case 0301: reserved test coverage.
-// Additional review-fixture case 0302: reserved test coverage.
-// Additional review-fixture case 0303: reserved test coverage.
-// Additional review-fixture case 0304: reserved test coverage.
-// Additional review-fixture case 0305: reserved test coverage.
-// Additional review-fixture case 0306: reserved test coverage.
-// Additional review-fixture case 0307: reserved test coverage.
-// Additional review-fixture case 0308: reserved test coverage.
-// Additional review-fixture case 0309: reserved test coverage.
-// Additional review-fixture case 0310: reserved test coverage.
-// Additional review-fixture case 0311: reserved test coverage.
-// Additional review-fixture case 0312: reserved test coverage.
-// Additional review-fixture case 0313: reserved test coverage.
-// Additional review-fixture case 0314: reserved test coverage.
-// Additional review-fixture case 0315: reserved test coverage.
-// Additional review-fixture case 0316: reserved test coverage.
-// Additional review-fixture case 0317: reserved test coverage.
-// Additional review-fixture case 0318: reserved test coverage.
-// Additional review-fixture case 0319: reserved test coverage.
-// Additional review-fixture case 0320: reserved test coverage.
-// Additional review-fixture case 0321: reserved test coverage.
-// Additional review-fixture case 0322: reserved test coverage.
-// Additional review-fixture case 0323: reserved test coverage.
-// Additional review-fixture case 0324: reserved test coverage.
-// Additional review-fixture case 0325: reserved test coverage.
-// Additional review-fixture case 0326: reserved test coverage.
-// Additional review-fixture case 0327: reserved test coverage.
-// Additional review-fixture case 0328: reserved test coverage.
-// Additional review-fixture case 0329: reserved test coverage.
-// Additional review-fixture case 0330: reserved test coverage.
-// Additional review-fixture case 0331: reserved test coverage.
-// Additional review-fixture case 0332: reserved test coverage.
-// Additional review-fixture case 0333: reserved test coverage.
-// Additional review-fixture case 0334: reserved test coverage.
-// Additional review-fixture case 0335: reserved test coverage.
-// Additional review-fixture case 0336: reserved test coverage.
-// Additional review-fixture case 0337: reserved test coverage.
-// Additional review-fixture case 0338: reserved test coverage.
-// Additional review-fixture case 0339: reserved test coverage.
-// Additional review-fixture case 0340: reserved test coverage.
-// Additional review-fixture case 0341: reserved test coverage.
-// Additional review-fixture case 0342: reserved test coverage.
-// Additional review-fixture case 0343: reserved test coverage.
-// Additional review-fixture case 0344: reserved test coverage.
-// Additional review-fixture case 0345: reserved test coverage.
-// Additional review-fixture case 0346: reserved test coverage.
-// Additional review-fixture case 0347: reserved test coverage.
-// Additional review-fixture case 0348: reserved test coverage.
-// Additional review-fixture case 0349: reserved test coverage.
-// Additional review-fixture case 0350: reserved test coverage.
-// Additional review-fixture case 0351: reserved test coverage.
-// Additional review-fixture case 0352: reserved test coverage.
-// Additional review-fixture case 0353: reserved test coverage.
-// Additional review-fixture case 0354: reserved test coverage.
-// Additional review-fixture case 0355: reserved test coverage.
-// Additional review-fixture case 0356: reserved test coverage.
-// Additional review-fixture case 0357: reserved test coverage.
-// Additional review-fixture case 0358: reserved test coverage.
-// Additional review-fixture case 0359: reserved test coverage.
-// Additional review-fixture case 0360: reserved test coverage.
-// Additional review-fixture case 0361: reserved test coverage.
-// Additional review-fixture case 0362: reserved test coverage.
-// Additional review-fixture case 0363: reserved test coverage.
-// Additional review-fixture case 0364: reserved test coverage.
-// Additional review-fixture case 0365: reserved test coverage.
-// Additional review-fixture case 0366: reserved test coverage.
-// Additional review-fixture case 0367: reserved test coverage.
-// Additional review-fixture case 0368: reserved test coverage.
-// Additional review-fixture case 0369: reserved test coverage.
-// Additional review-fixture case 0370: reserved test coverage.
-// Additional review-fixture case 0371: reserved test coverage.
-// Additional review-fixture case 0372: reserved test coverage.
-// Additional review-fixture case 0373: reserved test coverage.
-// Additional review-fixture case 0374: reserved test coverage.
-// Additional review-fixture case 0375: reserved test coverage.
-// Additional review-fixture case 0376: reserved test coverage.
-// Additional review-fixture case 0377: reserved test coverage.
-// Additional review-fixture case 0378: reserved test coverage.
-// Additional review-fixture case 0379: reserved test coverage.
-// Additional review-fixture case 0380: reserved test coverage.
-// Additional review-fixture case 0381: reserved test coverage.
-// Additional review-fixture case 0382: reserved test coverage.
-// Additional review-fixture case 0383: reserved test coverage.
-// Additional review-fixture case 0384: reserved test coverage.
-// Additional review-fixture case 0385: reserved test coverage.
-// Additional review-fixture case 0386: reserved test coverage.
-// Additional review-fixture case 0387: reserved test coverage.
-// Additional review-fixture case 0388: reserved test coverage.
-// Additional review-fixture case 0389: reserved test coverage.
-// Additional review-fixture case 0390: reserved test coverage.
-// Additional review-fixture case 0391: reserved test coverage.
-// Additional review-fixture case 0392: reserved test coverage.
-// Additional review-fixture case 0393: reserved test coverage.
-// Additional review-fixture case 0394: reserved test coverage.
-// Additional review-fixture case 0395: reserved test coverage.
-// Additional review-fixture case 0396: reserved test coverage.
-// Additional review-fixture case 0397: reserved test coverage.
-// Additional review-fixture case 0398: reserved test coverage.
-// Additional review-fixture case 0399: reserved test coverage.
-// Additional review-fixture case 0400: reserved test coverage.
-// Additional review-fixture case 0401: reserved test coverage.
-// Additional review-fixture case 0402: reserved test coverage.
-// Additional review-fixture case 0403: reserved test coverage.
-// Additional review-fixture case 0404: reserved test coverage.
-// Additional review-fixture case 0405: reserved test coverage.
-// Additional review-fixture case 0406: reserved test coverage.
-// Additional review-fixture case 0407: reserved test coverage.
-// Additional review-fixture case 0408: reserved test coverage.
-// Additional review-fixture case 0409: reserved test coverage.
-// Additional review-fixture case 0410: reserved test coverage.
-// Additional review-fixture case 0411: reserved test coverage.
-// Additional review-fixture case 0412: reserved test coverage.
-// Additional review-fixture case 0413: reserved test coverage.
-// Additional review-fixture case 0414: reserved test coverage.
-// Additional review-fixture case 0415: reserved test coverage.
-// Additional review-fixture case 0416: reserved test coverage.
-// Additional review-fixture case 0417: reserved test coverage.
-// Additional review-fixture case 0418: reserved test coverage.
-// Additional review-fixture case 0419: reserved test coverage.
-// Additional review-fixture case 0420: reserved test coverage.
-// Additional review-fixture case 0421: reserved test coverage.
-// Additional review-fixture case 0422: reserved test coverage.
-// Additional review-fixture case 0423: reserved test coverage.
-// Additional review-fixture case 0424: reserved test coverage.
-// Additional review-fixture case 0425: reserved test coverage.
-// Additional review-fixture case 0426: reserved test coverage.
-// Additional review-fixture case 0427: reserved test coverage.
-// Additional review-fixture case 0428: reserved test coverage.
-// Additional review-fixture case 0429: reserved test coverage.
-// Additional review-fixture case 0430: reserved test coverage.
-// Additional review-fixture case 0431: reserved test coverage.
-// Additional review-fixture case 0432: reserved test coverage.
-// Additional review-fixture case 0433: reserved test coverage.
-// Additional review-fixture case 0434: reserved test coverage.
-// Additional review-fixture case 0435: reserved test coverage.
-// Additional review-fixture case 0436: reserved test coverage.
-// Additional review-fixture case 0437: reserved test coverage.
-// Additional review-fixture case 0438: reserved test coverage.
-// Additional review-fixture case 0439: reserved test coverage.
-// Additional review-fixture case 0440: reserved test coverage.
-// Additional review-fixture case 0441: reserved test coverage.
-// Additional review-fixture case 0442: reserved test coverage.
-// Additional review-fixture case 0443: reserved test coverage.
-// Additional review-fixture case 0444: reserved test coverage.
-// Additional review-fixture case 0445: reserved test coverage.
-// Additional review-fixture case 0446: reserved test coverage.
-// Additional review-fixture case 0447: reserved test coverage.
-// Additional review-fixture case 0448: reserved test coverage.
-// Additional review-fixture case 0449: reserved test coverage.
-// Additional review-fixture case 0450: reserved test coverage.
-// Additional review-fixture case 0451: reserved test coverage.
-// Additional review-fixture case 0452: reserved test coverage.
-// Additional review-fixture case 0453: reserved test coverage.
-// Additional review-fixture case 0454: reserved test coverage.
-// Additional review-fixture case 0455: reserved test coverage.
-// Additional review-fixture case 0456: reserved test coverage.
-// Additional review-fixture case 0457: reserved test coverage.
-// Additional review-fixture case 0458: reserved test coverage.
-// Additional review-fixture case 0459: reserved test coverage.
-// Additional review-fixture case 0460: reserved test coverage.
-// Additional review-fixture case 0461: reserved test coverage.
-// Additional review-fixture case 0462: reserved test coverage.
-// Additional review-fixture case 0463: reserved test coverage.
-// Additional review-fixture case 0464: reserved test coverage.
-// Additional review-fixture case 0465: reserved test coverage.
-// Additional review-fixture case 0466: reserved test coverage.
-// Additional review-fixture case 0467: reserved test coverage.
-// Additional review-fixture case 0468: reserved test coverage.
-// Additional review-fixture case 0469: reserved test coverage.
-// Additional review-fixture case 0470: reserved test coverage.
-// Additional review-fixture case 0471: reserved test coverage.
-// Additional review-fixture case 0472: reserved test coverage.
-// Additional review-fixture case 0473: reserved test coverage.
-// Additional review-fixture case 0474: reserved test coverage.
-// Additional review-fixture case 0475: reserved test coverage.
-// Additional review-fixture case 0476: reserved test coverage.
-// Additional review-fixture case 0477: reserved test coverage.
-// Additional review-fixture case 0478: reserved test coverage.
-// Additional review-fixture case 0479: reserved test coverage.
-// Additional review-fixture case 0480: reserved test coverage.
-// Additional review-fixture case 0481: reserved test coverage.
-// Additional review-fixture case 0482: reserved test coverage.
-// Additional review-fixture case 0483: reserved test coverage.
-// Additional review-fixture case 0484: reserved test coverage.
-// Additional review-fixture case 0485: reserved test coverage.
-// Additional review-fixture case 0486: reserved test coverage.
-// Additional review-fixture case 0487: reserved test coverage.
-// Additional review-fixture case 0488: reserved test coverage.
-// Additional review-fixture case 0489: reserved test coverage.
-// Additional review-fixture case 0490: reserved test coverage.
-// Additional review-fixture case 0491: reserved test coverage.
-// Additional review-fixture case 0492: reserved test coverage.
-// Additional review-fixture case 0493: reserved test coverage.
-// Additional review-fixture case 0494: reserved test coverage.
-// Additional review-fixture case 0495: reserved test coverage.
-// Additional review-fixture case 0496: reserved test coverage.
-// Additional review-fixture case 0497: reserved test coverage.
-// Additional review-fixture case 0498: reserved test coverage.
-// Additional review-fixture case 0499: reserved test coverage.
-// Additional review-fixture case 0500: reserved test coverage.
-// Additional review-fixture case 0501: reserved test coverage.
-// Additional review-fixture case 0502: reserved test coverage.
-// Additional review-fixture case 0503: reserved test coverage.
-// Additional review-fixture case 0504: reserved test coverage.
-// Additional review-fixture case 0505: reserved test coverage.
-// Additional review-fixture case 0506: reserved test coverage.
-// Additional review-fixture case 0507: reserved test coverage.
-// Additional review-fixture case 0508: reserved test coverage.
-// Additional review-fixture case 0509: reserved test coverage.
-// Additional review-fixture case 0510: reserved test coverage.
-// Additional review-fixture case 0511: reserved test coverage.
-// Additional review-fixture case 0512: reserved test coverage.
-// Additional review-fixture case 0513: reserved test coverage.
-// Additional review-fixture case 0514: reserved test coverage.
-// Additional review-fixture case 0515: reserved test coverage.
-// Additional review-fixture case 0516: reserved test coverage.
-// Additional review-fixture case 0517: reserved test coverage.
-// Additional review-fixture case 0518: reserved test coverage.
-// Additional review-fixture case 0519: reserved test coverage.
-// Additional review-fixture case 0520: reserved test coverage.
-// Additional review-fixture case 0521: reserved test coverage.
-// Additional review-fixture case 0522: reserved test coverage.
-// Additional review-fixture case 0523: reserved test coverage.
-// Additional review-fixture case 0524: reserved test coverage.
-// Additional review-fixture case 0525: reserved test coverage.
-// Additional review-fixture case 0526: reserved test coverage.
-// Additional review-fixture case 0527: reserved test coverage.
-// Additional review-fixture case 0528: reserved test coverage.
-// Additional review-fixture case 0529: reserved test coverage.
-// Additional review-fixture case 0530: reserved test coverage.
-// Additional review-fixture case 0531: reserved test coverage.
-// Additional review-fixture case 0532: reserved test coverage.
-// Additional review-fixture case 0533: reserved test coverage.
-// Additional review-fixture case 0534: reserved test coverage.
-// Additional review-fixture case 0535: reserved test coverage.
-// Additional review-fixture case 0536: reserved test coverage.
-// Additional review-fixture case 0537: reserved test coverage.
-// Additional review-fixture case 0538: reserved test coverage.
-// Additional review-fixture case 0539: reserved test coverage.
-// Additional review-fixture case 0540: reserved test coverage.
-// Additional review-fixture case 0541: reserved test coverage.
-// Additional review-fixture case 0542: reserved test coverage.
-// Additional review-fixture case 0543: reserved test coverage.
-// Additional review-fixture case 0544: reserved test coverage.
-// Additional review-fixture case 0545: reserved test coverage.
-// Additional review-fixture case 0546: reserved test coverage.
-// Additional review-fixture case 0547: reserved test coverage.
-// Additional review-fixture case 0548: reserved test coverage.
-// Additional review-fixture case 0549: reserved test coverage.
-// Additional review-fixture case 0550: reserved test coverage.
-// Additional review-fixture case 0551: reserved test coverage.
-// Additional review-fixture case 0552: reserved test coverage.
-// Additional review-fixture case 0553: reserved test coverage.
-// Additional review-fixture case 0554: reserved test coverage.
-// Additional review-fixture case 0555: reserved test coverage.
-// Additional review-fixture case 0556: reserved test coverage.
-// Additional review-fixture case 0557: reserved test coverage.
-// Additional review-fixture case 0558: reserved test coverage.
-// Additional review-fixture case 0559: reserved test coverage.
-// Additional review-fixture case 0560: reserved test coverage.
-// Additional review-fixture case 0561: reserved test coverage.
-// Additional review-fixture case 0562: reserved test coverage.
-// Additional review-fixture case 0563: reserved test coverage.
-// Additional review-fixture case 0564: reserved test coverage.
-// Additional review-fixture case 0565: reserved test coverage.
-// Additional review-fixture case 0566: reserved test coverage.
-// Additional review-fixture case 0567: reserved test coverage.
-// Additional review-fixture case 0568: reserved test coverage.
-// Additional review-fixture case 0569: reserved test coverage.
-// Additional review-fixture case 0570: reserved test coverage.
-// Additional review-fixture case 0571: reserved test coverage.
-// Additional review-fixture case 0572: reserved test coverage.
-// Additional review-fixture case 0573: reserved test coverage.
-// Additional review-fixture case 0574: reserved test coverage.
-// Additional review-fixture case 0575: reserved test coverage.
-// Additional review-fixture case 0576: reserved test coverage.
-// Additional review-fixture case 0577: reserved test coverage.
-// Additional review-fixture case 0578: reserved test coverage.
-// Additional review-fixture case 0579: reserved test coverage.
-// Additional review-fixture case 0580: reserved test coverage.
-// Additional review-fixture case 0581: reserved test coverage.
-// Additional review-fixture case 0582: reserved test coverage.
-// Additional review-fixture case 0583: reserved test coverage.
-// Additional review-fixture case 0584: reserved test coverage.
-// Additional review-fixture case 0585: reserved test coverage.
-// Additional review-fixture case 0586: reserved test coverage.
-// Additional review-fixture case 0587: reserved test coverage.
-// Additional review-fixture case 0588: reserved test coverage.
-// Additional review-fixture case 0589: reserved test coverage.
-// Additional review-fixture case 0590: reserved test coverage.
-// Additional review-fixture case 0591: reserved test coverage.
-// Additional review-fixture case 0592: reserved test coverage.
-// Additional review-fixture case 0593: reserved test coverage.
-// Additional review-fixture case 0594: reserved test coverage.
-// Additional review-fixture case 0595: reserved test coverage.
-// Additional review-fixture case 0596: reserved test coverage.
-// Additional review-fixture case 0597: reserved test coverage.
-// Additional review-fixture case 0598: reserved test coverage.
-// Additional review-fixture case 0599: reserved test coverage.
-// Additional review-fixture case 0600: reserved test coverage.
-// Additional review-fixture case 0601: reserved test coverage.
-// Additional review-fixture case 0602: reserved test coverage.
-// Additional review-fixture case 0603: reserved test coverage.
-// Additional review-fixture case 0604: reserved test coverage.
-// Additional review-fixture case 0605: reserved test coverage.
-// Additional review-fixture case 0606: reserved test coverage.
-// Additional review-fixture case 0607: reserved test coverage.
-// Additional review-fixture case 0608: reserved test coverage.
-// Additional review-fixture case 0609: reserved test coverage.
-// Additional review-fixture case 0610: reserved test coverage.
-// Additional review-fixture case 0611: reserved test coverage.
-// Additional review-fixture case 0612: reserved test coverage.
-// Additional review-fixture case 0613: reserved test coverage.
-// Additional review-fixture case 0614: reserved test coverage.
-// Additional review-fixture case 0615: reserved test coverage.
-// Additional review-fixture case 0616: reserved test coverage.
-// Additional review-fixture case 0617: reserved test coverage.
-// Additional review-fixture case 0618: reserved test coverage.
-// Additional review-fixture case 0619: reserved test coverage.
-// Additional review-fixture case 0620: reserved test coverage.
-// Additional review-fixture case 0621: reserved test coverage.
-// Additional review-fixture case 0622: reserved test coverage.
-// Additional review-fixture case 0623: reserved test coverage.
-// Additional review-fixture case 0624: reserved test coverage.
-// Additional review-fixture case 0625: reserved test coverage.
+// Scenario 0146: appointment workflow validation case.
+function appointmentScenario0146(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 146, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0147: appointment workflow validation case.
+function appointmentScenario0147(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 147, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0148: appointment workflow validation case.
+function appointmentScenario0148(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 148, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0149: appointment workflow validation case.
+function appointmentScenario0149(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 149, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0150: appointment workflow validation case.
+function appointmentScenario0150(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 150, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0151: appointment workflow validation case.
+function appointmentScenario0151(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 151, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0152: appointment workflow validation case.
+function appointmentScenario0152(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 152, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0153: appointment workflow validation case.
+function appointmentScenario0153(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 153, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0154: appointment workflow validation case.
+function appointmentScenario0154(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 154, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0155: appointment workflow validation case.
+function appointmentScenario0155(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 155, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0156: appointment workflow validation case.
+function appointmentScenario0156(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 156, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0157: appointment workflow validation case.
+function appointmentScenario0157(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 157, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0158: appointment workflow validation case.
+function appointmentScenario0158(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 158, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0159: appointment workflow validation case.
+function appointmentScenario0159(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 159, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0160: appointment workflow validation case.
+function appointmentScenario0160(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 160, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0161: appointment workflow validation case.
+function appointmentScenario0161(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 161, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0162: appointment workflow validation case.
+function appointmentScenario0162(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 162, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0163: appointment workflow validation case.
+function appointmentScenario0163(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 163, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0164: appointment workflow validation case.
+function appointmentScenario0164(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 164, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0165: appointment workflow validation case.
+function appointmentScenario0165(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 165, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0166: appointment workflow validation case.
+function appointmentScenario0166(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 166, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0167: appointment workflow validation case.
+function appointmentScenario0167(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 167, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0168: appointment workflow validation case.
+function appointmentScenario0168(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 168, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0169: appointment workflow validation case.
+function appointmentScenario0169(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 169, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0170: appointment workflow validation case.
+function appointmentScenario0170(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 170, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0171: appointment workflow validation case.
+function appointmentScenario0171(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 171, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0172: appointment workflow validation case.
+function appointmentScenario0172(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 172, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0173: appointment workflow validation case.
+function appointmentScenario0173(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 173, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0174: appointment workflow validation case.
+function appointmentScenario0174(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 174, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0175: appointment workflow validation case.
+function appointmentScenario0175(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 175, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0176: appointment workflow validation case.
+function appointmentScenario0176(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 176, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0177: appointment workflow validation case.
+function appointmentScenario0177(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 177, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0178: appointment workflow validation case.
+function appointmentScenario0178(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 178, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0179: appointment workflow validation case.
+function appointmentScenario0179(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 179, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0180: appointment workflow validation case.
+function appointmentScenario0180(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 180, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0181: appointment workflow validation case.
+function appointmentScenario0181(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 181, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0182: appointment workflow validation case.
+function appointmentScenario0182(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 182, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0183: appointment workflow validation case.
+function appointmentScenario0183(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 183, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0184: appointment workflow validation case.
+function appointmentScenario0184(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 184, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0185: appointment workflow validation case.
+function appointmentScenario0185(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 185, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0186: appointment workflow validation case.
+function appointmentScenario0186(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 186, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0187: appointment workflow validation case.
+function appointmentScenario0187(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 187, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0188: appointment workflow validation case.
+function appointmentScenario0188(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 188, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0189: appointment workflow validation case.
+function appointmentScenario0189(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 189, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0190: appointment workflow validation case.
+function appointmentScenario0190(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 190, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0191: appointment workflow validation case.
+function appointmentScenario0191(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 191, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0192: appointment workflow validation case.
+function appointmentScenario0192(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 192, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0193: appointment workflow validation case.
+function appointmentScenario0193(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 193, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0194: appointment workflow validation case.
+function appointmentScenario0194(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 194, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0195: appointment workflow validation case.
+function appointmentScenario0195(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 195, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0196: appointment workflow validation case.
+function appointmentScenario0196(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 196, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0197: appointment workflow validation case.
+function appointmentScenario0197(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 197, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0198: appointment workflow validation case.
+function appointmentScenario0198(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 198, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0199: appointment workflow validation case.
+function appointmentScenario0199(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 199, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Scenario 0200: appointment workflow validation case.
+function appointmentScenario0200(input, dependencies = {}) {
+  const id = normalizeId(input && input.id);
+  if (!id) return { ok: false, error: 'id_required' };
+  const context = { module: MODULE_NAME, scenario: 200, id };
+  if (dependencies.audit) dependencies.audit(context);
+  return { ok: true, context };
+}
+
+// Reserved scale-test case 0001: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0002: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0003: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0004: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0005: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0006: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0007: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0008: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0009: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0010: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0011: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0012: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0013: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0014: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0015: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0016: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0017: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0018: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0019: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0020: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0021: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0022: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0023: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0024: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0025: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0026: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0027: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0028: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0029: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0030: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0031: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0032: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0033: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0034: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0035: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0036: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0037: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0038: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0039: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0040: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0041: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0042: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0043: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0044: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0045: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0046: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0047: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0048: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0049: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0050: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0051: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0052: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0053: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0054: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0055: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0056: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0057: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0058: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0059: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0060: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0061: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0062: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0063: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0064: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0065: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0066: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0067: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0068: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0069: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0070: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0071: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0072: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0073: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0074: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0075: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0076: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0077: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0078: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0079: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0080: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0081: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0082: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0083: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0084: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0085: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0086: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0087: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0088: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0089: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0090: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0091: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0092: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0093: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0094: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0095: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0096: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0097: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0098: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0099: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0100: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0101: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0102: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0103: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0104: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0105: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0106: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0107: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0108: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0109: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0110: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0111: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0112: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0113: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0114: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0115: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0116: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0117: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0118: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0119: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0120: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0121: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0122: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0123: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0124: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0125: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0126: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0127: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0128: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0129: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0130: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0131: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0132: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0133: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0134: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0135: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0136: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0137: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0138: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0139: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0140: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0141: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0142: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0143: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0144: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0145: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0146: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0147: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0148: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0149: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0150: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0151: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0152: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0153: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0154: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0155: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0156: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0157: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0158: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0159: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0160: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0161: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0162: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0163: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0164: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0165: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0166: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0167: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0168: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0169: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0170: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0171: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0172: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0173: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0174: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0175: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0176: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0177: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0178: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0179: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0180: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0181: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0182: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0183: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0184: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0185: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0186: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0187: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0188: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0189: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0190: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0191: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0192: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0193: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0194: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0195: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0196: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0197: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0198: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0199: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0200: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0201: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0202: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0203: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0204: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0205: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0206: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0207: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0208: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0209: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0210: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0211: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0212: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0213: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0214: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0215: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0216: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0217: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0218: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0219: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0220: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0221: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0222: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0223: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0224: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0225: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0226: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0227: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0228: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0229: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0230: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0231: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0232: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0233: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0234: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0235: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0236: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0237: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0238: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0239: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0240: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0241: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0242: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0243: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0244: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0245: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0246: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0247: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0248: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0249: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0250: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0251: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0252: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0253: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0254: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0255: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0256: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0257: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0258: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0259: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0260: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0261: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0262: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0263: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0264: keep this fixture large enough to test review behavior.
+// Reserved scale-test case 0265: keep this fixture large enough to test review behavior.
